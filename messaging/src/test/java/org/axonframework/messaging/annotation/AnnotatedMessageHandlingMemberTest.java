@@ -24,6 +24,8 @@ import org.axonframework.messaging.HandlerAttributes;
 import org.junit.jupiter.api.*;
 
 import java.util.Optional;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,8 +40,9 @@ class AnnotatedMessageHandlingMemberTest {
 
     @BeforeEach
     void setUp() {
+        Method method = Arrays.asList(AnnotatedHandler.class.getMethods()).stream().filter(m->"handlingMethod".equals(m.getName())).findFirst().orElse(null);
         testSubject = new AnnotatedMessageHandlingMember<>(
-                AnnotatedHandler.class.getMethods()[0],
+                method,
                 EventMessage.class,
                 String.class,
                 ClasspathParameterResolverFactory.forClass(AnnotatedHandler.class)
